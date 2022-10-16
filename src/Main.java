@@ -5,7 +5,9 @@ import GoldChanges.Treasury;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -30,12 +32,11 @@ public class Main {
             e.printStackTrace();
         }
 
-        //сортировка транзакций по добавлению, для удобства чтения техподдержкой (плохо рабочая)
-        //при использовании бд сортировка будет работать как надо
-        treasury.getChangeLog().sort(Comparator.comparing(Transaction::getInitial));
+        List<Transaction> result = treasury.getChangeLog();
 
-        System.out.println(("\t".repeat(15)) + "Change Log\n\n" + treasury.getChangeLog()
+        System.out.println(("\t".repeat(15)) + "Change Log\n\n" + result
                 + "\t\tОбщее время выполнения - " + (end - start) + " ns");
+        System.out.println(Collections.max(result, Comparator.comparing(Transaction::getInitial)).getInitial());
     }
 
     static long start, end;
@@ -50,7 +51,7 @@ public class Main {
             service.execute(() -> {
                 try {
                     treasury.createTransaction(
-                           1, Thread.currentThread().getName(), "0", Cause.TASK);
+                            1, Thread.currentThread().getName(), "0", Cause.TASK);
                 } catch (ClanNotFoundException ex) {
                     System.out.println("Clan does not exists");
                 }
