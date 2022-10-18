@@ -34,9 +34,10 @@ public class Main {
 
         List<Transaction> result = treasury.getChangeLog();
 
+        result.sort(Comparator.comparing(Transaction::getCreated));
+
         System.out.println(("\t".repeat(15)) + "Change Log\n\n" + result
                 + "\t\tОбщее время выполнения - " + (end - start) + " ns");
-        System.out.println(Collections.max(result, Comparator.comparing(Transaction::getInitial)).getInitial());
     }
 
     static long start, end;

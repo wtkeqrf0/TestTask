@@ -22,6 +22,11 @@ public final class Transaction {
         this.created = created;
     }
 
+    //геттеры созданы для сортировки выподимых данных (не обязательны)
+    public LocalDateTime getCreated() {
+        return created;
+    }
+
     public int getInitial() {
         return initial;
     }
